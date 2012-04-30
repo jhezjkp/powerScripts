@@ -8,7 +8,7 @@
 import sys
 
 def hilite(msg, status, bold):
-    if sys.stdout.isatty():
+    if sys.platform.startswith('linux') and sys.stdout.isatty():
         attrs = []
         if status:
             #绿色
