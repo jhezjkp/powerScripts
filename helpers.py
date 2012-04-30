@@ -6,22 +6,18 @@
 '''
 
 import sys
+from colorama import Fore, Back, Style, init
 
-def hilite(msg, status, bold):
-    if sys.platform.startswith('linux') and sys.stdout.isatty():
-        attrs = []
-        if status:
-            #绿色
-            attrs.append('32')
-        else:
-            #红色
-            attrs.append('31')
-        if bold:
-            attrs.append('1')
-        return '\x1b[%sm%s\x1b[0m' % (';'.join(attrs), msg)
+#init colorama
+init()
+
+def hilite(msg, foreColor=Fore.WHITE, backColor=Back.GREEN, style=Style.BRIGHT):
+    '''console文字高亮'''
+    if sys.stdout.isatty():
+        return foreColor+backColor+style+msg+Style.RESET_ALL
     else:
         return msg
 
 if __name__=='__main__':
-    print hilite('helpers test', True, True)
+    print 'hilite:', hilite('customise hilite', Fore.RED, Back.WHITE, Style.DIM), 'and', hilite('default hilite')
     
