@@ -1,31 +1,25 @@
 #!/usr/bin/python
 #encoding=utf-8
 
-import sys, os.path, hashlib
+import sys
+import os.path
+import hashlib
 
-def md5(filePath):
-	'''
-	¼ÆËãÎÄ¼şmd5Öµ
-	'''
-	md5 = hashlib.md5()
-	with open(filePath) as f:
-		for line in f:
-			md5.update(line)
-	return md5.hexdigest()
-	
+from helpers import hashFile, hilite
+
 def hashFiles(path):
 	'''
-	¼ÆËãÂ·¾¶ÏÂËùÓĞÎÄ¼şµÄ¹şÏ£Öµ£¬·µ»Ø½á¹ûmap
+	è®¡ç®—è·¯å¾„ä¸‹æ‰€æœ‰æ–‡ä»¶çš„å“ˆå¸Œå€¼ï¼Œè¿”å›ç»“æœmap
 	'''
 	map = {}
 	for root, dirs, files in os.walk(path):
 		for file in files:
 			path = os.path.join(root, file)
-			if file in map:	#ÓĞÍ¬ÃûÎÄ¼ş
-				print "·¢ÏÖÍ¬ÃûÎÄ¼ş£º", file
+			if file in map:	#æœ‰åŒåæ–‡ä»¶
+				print "å‘ç°åŒåæ–‡ä»¶ï¼š", file
 				sys.exit(-1)
 			else:
-				map[file] = md5(path)
+				map[file] = hashFile(path)
 	return map
 
 if __name__ == "__main__":
@@ -35,30 +29,32 @@ if __name__ == "__main__":
 	else:
 		pathA = sys.argv[1]
 		pathB = sys.argv[2]
-		
-		#È·ÈÏÖ¸¶¨µÄÂ·¾¶¶¼´æÔÚ
+
+		reload(sys)
+		sys.setdefaultencoding('utf-8')
+		#ç¡®è®¤æŒ‡å®šçš„è·¯å¾„éƒ½å­˜åœ¨
 		if not os.path.exists(pathA):
 		  print "error:", pathA, "doesn't exist!"
 		  sys.exit(-1)
 		if not os.path.exists(pathB):
 		  print "error:", pathB, "doesn't exist!"
 		  sys.exit(-1) 
-		
-		#¼ÆËãÂ·¾¶ÏÂµÄÎÄ¼şmd5Öµ
+	
+		#è®¡ç®—è·¯å¾„ä¸‹çš„æ–‡ä»¶md5å€¼
 		mapA = hashFiles(pathA)
 		mapB = hashFiles(pathB)
-		
-		#±È½ÏÒìÍ¬
+	
+		#æ¯”è¾ƒå¼‚åŒ
 		diffList = []
 		commonKeys = mapA.viewkeys() & mapB.viewkeys()
 		for key in commonKeys:
 			if mapA[key]!=mapB[key]:
 					diffList.append(key)
 		setxorList = mapA.viewkeys() ^ mapB.viewkeys()
-		
-		#ÏÔÊ¾±È½Ï½á¹û
+
+		#æ˜¾ç¤ºæ¯”è¾ƒç»“æœ
 		if len(diffList)==0 and len(setxorList)==0:
-			print pathA+"Óë"+pathB+"ÖĞµÄÎÄ¼şÍêÈ«Ò»ÖÂ"
+			print pathA+"ä¸"+pathB+"ä¸­çš„æ–‡ä»¶"+hilite("å®Œå…¨ä¸€è‡´")
 		else:			
 			print "%-35s\t%32s\t%32s" % ("", pathA, pathB)
 			for file in diffList:
