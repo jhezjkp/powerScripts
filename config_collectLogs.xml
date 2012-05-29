@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<servers>
+	
+	<gameLogs>
+		<log>WarGuildResult.log</log>
+		<log>ExchangeCode.log</log>
+		<log>Rebate.log</log>
+		<log>BreakItem.log</log>
+		<log>ItemEnhance.log</log>
+		<log>ItemEnchant.log</log>
+		<log>MakeRuneWord.log</log>
+		<log>ItemSynthesis.log</log>
+		<log>EnchaseItem.log</log>
+		<log>ChangeItem.log</log>
+		<log>itemUse.log</log>
+		<log>kill_monster.log</log>
+		<log>error_protocol.log</log>
+		<log>Bank.log</log>
+		<log>ConsumeDiamond.log</log>
+		<log>WaiGua.log</log>
+		<log>Diamond.log</log>
+		<log>Bigbao.log</log>
+		<log>OffLine.log</log>
+		<log>Charge.log</log>
+		<log>YuanBaoCharge.log</log>
+		<log>Consign.log</log>
+		<log>cancelConsign.log</log>
+		<log>consig_storageitem.log</log>
+		<log>shop.log</log>
+		<log>com.morefuntek.game.entity.Player.log</log>
+		<log>StorageItem.log</log>
+		<log>StorageMoney.log</log>
+		<log>tradeInfo.log</log>
+		<log>GambleItem.log</log>
+		<log>Divination.log</log>
+	</gameLogs>
+	
+	<loginLogs>
+		<log>Charge.log</log>
+	</loginLogs>
+
+	<server>
+		<label>登录服</label>
+		<name>login</name>
+		<path>/home/tx/login</path>
+	</server>
+
+	<server>
+                <label>腾讯测试服</label>
+                <name>game</name>
+                <path>/home/tx/game</path>
+        </server>
+
+</servers>
