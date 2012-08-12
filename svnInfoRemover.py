@@ -5,7 +5,11 @@
 该脚本用于清理脚本所在目录下SVN信息
 '''
 
-import sys, os, shutil, stat
+import sys
+import os
+import shutil
+import stat
+
 
 def on_rm_error(func, path, exc_info):
     '''
@@ -16,7 +20,7 @@ def on_rm_error(func, path, exc_info):
 
 for root, dirs, files in os.walk("."):
     for dir in dirs:
-        if dir==".svn":            
+        if dir ==".svn":            
             path = os.path.join(root, dir)
             print "deleting", path
             try:
@@ -24,4 +28,3 @@ for root, dirs, files in os.walk("."):
             except:
                 info = sys.exc_info()
                 print info[0], ":", info[1]
-            
