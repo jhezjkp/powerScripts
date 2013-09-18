@@ -3,6 +3,8 @@
 
 '''
 一个通用的辅助工具类
+依赖以下库：
+colorama
 '''
 
 import sys
@@ -34,16 +36,18 @@ class DirHashUnavaliableException(Exception):
         return "暂时不支持对目录的希值计算"
 
 
-def hashFile(filePath, algorithm='md5'):
+def hashFile(filePath, algorithm='md5', blocksize=65536):
     '''计算文件哈希值，默认为md5算法'''
     if not os.path.exists(filePath):
         raise IOError("No such file: '" + filePath + "'")
     elif os.path.isdir(filePath):
         raise DirHashUnavaliableException()
     h = hashlib.new(algorithm)
-    with open(filePath) as f:
-        for line in f:
-            h.update(line)
+    afile = open(filePath, 'rb')
+    buf = afile.read(blocksize)
+    while len(buf) >0:
+        h.update(buf)
+        buf = afile.read(blocksize)
     return h.hexdigest()
 
 
