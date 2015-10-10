@@ -2,6 +2,7 @@
 # encoding=utf-8
 
 import sys
+import threading
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -91,6 +92,36 @@ def changlenge3():
             else:
                 print r.text
 
+class Task(threading.Thread):
+
+    def __init__(self, s, url, csrf, i):
+        super(Task, self).__init__()
+        self.name = "thread-" + str(i)
+        self.s = s
+        self.url = url
+        self.csrf = csrf
+        self.i = i
+
+    def run(self):
+        n = 0
+        while not sig.is_set():
+            if n % total != self.i:
+                continue
+            print self.name, "try password:", n
+            data = {"username": "kvvs", "password": n,
+                    "csrfmiddlewaretoken": self.csrf}
+            r = self.s.post(self.url, data=data)
+            if r.status_code == 200:
+                if r.content.find("您输入的密码错误") != -1:
+                    n += 1
+                    # print r.text
+                    continue
+                else:
+                    print "password is: ", n
+                    print r.text
+                    sig.set()
+                    break
+
 
 def changlenge4():
     s = requests.Session()
@@ -117,25 +148,31 @@ def changlenge4():
 
         url = "http://www.heibanke.com/lesson/crawler_ex03/"
         n = 0
-        while True:
-            print "try password:", n
-            data = {"username": "kvvs", "password": n,
-                    "csrfmiddlewaretoken": csrf}
-            r = s.post(url, data=data)
-            if r.status_code == 200:
-                if r.content.find("您输入的密码错误") != -1:
-                    n += 1
-                    # print r.text
-                    continue
-                else:
-                    print "password is: ", n
-                    print r.text
-                    bs = BeautifulSoup(r.text, "html.parser")
-                    break
-            else:
-                print r.text
-                sys.exit(1)
+        for i in range(total):
+            t = Task(s, url, csrf, i)
+            print "start thread", i
+            t.start()
+        #while True:
+            #print "try password:", n
+            #data = {"username": "kvvs", "password": n,
+                    #"csrfmiddlewaretoken": csrf}
+            #r = s.post(url, data=data)
+            #if r.status_code == 200:
+                #if r.content.find("您输入的密码错误") != -1:
+                    #n += 1
+                    ## print r.text
+                    #continue
+                #else:
+                    #print "password is: ", n
+                    #print r.text
+                    #bs = BeautifulSoup(r.text, "html.parser")
+                    #break
+            #else:
+                #print r.text
+         #       sys.exit(1)
 
 
+sig = threading.Event()
+total = 10
 if __name__ == "__main__":
     changlenge4()
